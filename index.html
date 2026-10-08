@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Wayfinder - Work Help Assistant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#f6f7fb;--card:#fff;--ink:#12141f;--mut:#6a7085;--line:#e6e8f0;--navy:#4f46e5;--navyfg:#fff;--red:#e11d48;--amb:#d97706;--soft:#f0f1f8;--grn:#059669;--sh:0 1px 2px rgba(18,20,31,.04),0 8px 28px rgba(18,20,31,.06);--glow:radial-gradient(60% 50% at 85% 0%,rgba(99,102,241,.16),transparent 70%),radial-gradient(50% 40% at 0% 100%,rgba(20,184,166,.12),transparent 70%)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0c0e17;--card:#151826;--ink:#eceef8;--mut:#9399b3;--line:#262a3f;--navy:#818cf8;--navyfg:#0c0e17;--red:#fb7185;--amb:#fbbf24;--soft:#1c2033;--grn:#34d399;--sh:0 1px 2px rgba(0,0,0,.3),0 8px 28px rgba(0,0,0,.35)}}
+:root[data-theme="dark"]{--bg:#0c0e17;--card:#151826;--ink:#eceef8;--mut:#9399b3;--line:#262a3f;--navy:#818cf8;--navyfg:#0c0e17;--red:#fb7185;--amb:#fbbf24;--soft:#1c2033;--grn:#34d399;--sh:0 1px 2px rgba(0,0,0,.3),0 8px 28px rgba(0,0,0,.35)}
+*{box-sizing:border-box}html,body{height:100%;margin:0}
+body{background:var(--bg) var(--glow);background-attachment:fixed;color:var(--ink);font:15.5px/1.6 "Plus Jakarta Sans","Segoe UI",system-ui,sans-serif;letter-spacing:-.005em}
+button,input,select{font:inherit;color:inherit}h1,h2,h3,.num{font-weight:800;letter-spacing:-.025em}
+.app{height:100%;display:grid;grid-template-columns:250px 1fr}
+.side{padding:20px 14px;display:flex;flex-direction:column;gap:18px;border-right:1px solid var(--line);background:color-mix(in srgb,var(--card) 70%,transparent);backdrop-filter:blur(18px)}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;letter-spacing:-.03em;padding:0 6px}
+.brand i{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,#6366f1,#14b8a6);display:grid;place-items:center;color:#fff;font-style:normal;font-size:16px}
+.brand small{display:block;font-size:11.5px;font-weight:500;color:var(--mut);letter-spacing:0;margin-top:-4px}
+nav{display:flex;flex-direction:column;gap:4px}
+nav button{background:none;border:0;text-align:left;padding:10px 12px;border-radius:12px;cursor:pointer;color:var(--mut);font-weight:600;transition:background .15s,color .15s}
+nav button:hover{background:var(--soft);color:var(--ink)}
+nav button[aria-current=true]{background:var(--ink);color:var(--bg)}
+.sbox{margin-top:auto;display:flex;flex-direction:column;gap:10px}
+.who{font-size:12.5px;color:var(--mut);display:flex;flex-direction:column;gap:5px;font-weight:600}
+.who select{padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--card);font-size:15px;font-weight:600;box-shadow:var(--sh);cursor:pointer}
+.demo{font-size:12px;color:var(--mut);background:var(--soft);border-radius:12px;padding:8px 10px;line-height:1.45}
+main{min-width:0;min-height:0;display:flex;flex-direction:column;padding:18px 22px;max-width:900px;width:100%;margin:0 auto}
+.pg{display:none;flex:1;min-height:0;flex-direction:column}.pg.on{display:flex}
+.scr,#log{flex:1;overflow:auto;display:flex;flex-direction:column;gap:14px;padding:2px 2px 14px}
+.me{align-self:flex-end;background:linear-gradient(135deg,#6366f1,#4f46e5);color:#fff;border-radius:20px 20px 6px 20px;padding:10px 16px;max-width:85%;box-shadow:0 6px 18px rgba(79,70,229,.28)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:18px 20px;box-shadow:var(--sh)}
+.card h2{margin:0 0 6px;font-size:26px}.card h3{margin:0 0 8px;font-size:17px}
+.hero h2{font-size:32px;line-height:1.15}
+.tag{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;border-radius:99px;padding:3px 11px 3px 9px;margin:0 6px 8px 0;background:color-mix(in srgb,currentColor 11%,transparent)}
+.tag:before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.t-n{color:var(--navy)}.t-r{color:var(--red)}.t-a{color:var(--amb)}.t-g{color:var(--mut)}
+.card p{margin:4px 0 8px}.small{font-size:13.5px;color:var(--mut)}
+.btn{background:linear-gradient(135deg,#6366f1,#4f46e5);color:#fff;border:0;border-radius:12px;padding:10px 18px;cursor:pointer;font-weight:700;box-shadow:0 6px 16px rgba(79,70,229,.28);transition:transform .12s}
+.btn:hover{transform:translateY(-1px)}.btn.g{background:var(--soft);color:var(--ink);box-shadow:none}
+:focus-visible{outline:3px solid color-mix(in srgb,var(--navy) 55%,transparent);outline-offset:2px}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+form.ask{display:flex;gap:8px;padding:6px 6px 6px 18px;margin-top:6px;background:var(--card);border:1px solid var(--line);border-radius:999px;box-shadow:var(--sh);align-items:center}
+form.ask input{flex:1;border:0;background:none;font-size:16px;padding:10px 0;outline:0;min-width:0}
+form.ask:focus-within{border-color:var(--navy)}form.ask .btn{border-radius:999px;padding:10px 20px}
+.list{margin:12px 0 0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:8px}
+.list button{background:var(--soft);border:1px solid transparent;border-radius:999px;padding:7px 14px;cursor:pointer;font-size:14px;font-weight:500;transition:all .15s}
+.list button:hover{background:var(--card);border-color:var(--navy);color:var(--navy);transform:translateY(-1px)}
+.fld{display:block;margin-top:10px;font-size:13.5px;font-weight:600;color:var(--mut)}.fld input{display:block;width:100%;margin-top:4px;padding:11px 12px;border:1px solid var(--line);border-radius:12px;background:var(--bg);font-size:16px;color:var(--ink)}
+.fld input:focus{border-color:var(--navy);outline:0}
+.src{border-radius:12px;padding:9px 12px;margin:10px 0;background:var(--soft);font-size:14px}
+.terms{font-size:13.5px;margin-top:12px;padding:10px 12px;border-radius:12px;background:var(--soft);color:var(--mut)}.terms b{color:var(--ink)}
+.err{color:var(--red);font-size:14px;margin-top:8px;font-weight:600}.load{color:var(--mut);animation:p 1.2s infinite}@keyframes p{50%{opacity:.45}}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px 18px;box-shadow:var(--sh)}
+.stat:first-child{background:linear-gradient(135deg,#6366f1,#4338ca);color:#fff;border:0}.stat:first-child span{color:#dfe1ff}
+.stat .num{font-size:40px;line-height:1.1}.stat span{font-size:13.5px;color:var(--mut);font-weight:500}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:12px}
+.bars div{display:grid;grid-template-columns:150px 1fr 28px;gap:10px;align-items:center;font-size:14px;margin:9px 0}
+.bars i{display:block;height:10px;background:linear-gradient(90deg,#6366f1,#14b8a6);border-radius:99px}
+.line{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:14.5px}.line:last-child{border:0}
+.gl dt{font-weight:700;margin-top:12px}.gl dd{margin:2px 0 0;color:var(--mut)}
+.empty{color:var(--mut);text-align:center;padding:30px}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 20px;border-radius:99px;font-weight:600;box-shadow:var(--sh)}
+@media (max-width:760px){.app{grid-template-columns:1fr;grid-template-rows:auto 1fr}.side{flex-direction:row;align-items:center;padding:10px 12px;border-right:0;border-bottom:1px solid var(--line)}.brand small,.demo{display:none}.sbox{margin:0 0 0 auto}.who{font-size:0}.who select{padding:7px 10px;font-size:14px}
+nav{position:fixed;bottom:0;left:0;right:0;z-index:5;flex-direction:row;justify-content:space-around;background:color-mix(in srgb,var(--card) 88%,transparent);backdrop-filter:blur(16px);border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px))}
+nav button{padding:8px 6px;font-size:12.5px;text-align:center;flex:1}main{padding:12px 12px 70px}.hero h2{font-size:26px}.bars div{grid-template-columns:105px 1fr 26px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+.roles{display:flex;align-items:center;gap:4px;background:var(--soft);border-radius:999px;padding:4px;margin-bottom:12px;overflow-x:auto;flex:none}
+.roles span{font-size:12.5px;font-weight:700;color:var(--mut);padding:0 10px 0 12px;white-space:nowrap}
+.roles button{background:none;border:0;border-radius:999px;padding:8px 16px;cursor:pointer;font-weight:700;color:var(--mut);white-space:nowrap;transition:all .15s}
+.roles button[aria-pressed=true]{background:var(--card);color:var(--navy);box-shadow:var(--sh)}
+@media (max-width:760px){.roles span{display:none}.roles button{padding:8px 12px;font-size:14px;flex:1}}
+.login{position:fixed;inset:0;z-index:50;display:grid;grid-template-columns:1.1fr 1fr;background:var(--bg)}.login[hidden]{display:none}
+.lp{background:linear-gradient(145deg,#312e81,#4f46e5 55%,#0d9488);color:#fff;padding:48px;display:flex;flex-direction:column;justify-content:center;gap:16px}
+.lp .brand small{color:#d6d9ff}.lp h1{font-size:42px;line-height:1.1;margin:10px 0 0}.lp p{max-width:420px;color:#e3e5ff;font-size:17px}
+.lf{display:grid;place-items:center;padding:20px;overflow:auto}.lcard{width:100%;max-width:400px;background:var(--card);border:1px solid var(--line);border-radius:24px;padding:26px;box-shadow:var(--sh)}
+.lcard h2{margin:0 0 4px;font-size:28px}.btn.wide{width:100%;margin-top:14px;padding:12px}
+.pw{display:flex;gap:6px;align-items:center}.pw input{margin-top:4px}.pw button{margin-top:4px;background:var(--soft);border:0;border-radius:10px;padding:10px 12px;cursor:pointer;font-weight:600;color:var(--mut)}
+#demo2 button{display:flex;justify-content:space-between;width:100%;background:none;border:0;border-bottom:1px solid var(--line);padding:8px 2px;cursor:pointer;text-align:left;font-size:14px}#demo2 button:hover{color:var(--navy)}#demo2 span{color:var(--mut)}
+.ubar{display:flex;align-items:center;justify-content:flex-end;gap:10px;margin-bottom:10px;flex:none}.ubar span{font-weight:700;font-size:14px;color:var(--mut)}.ubar .btn{padding:6px 14px}
+@media (max-width:760px){.login{grid-template-columns:1fr;grid-template-rows:auto 1fr}.lp{padding:20px 22px;gap:6px}.lp h1{font-size:24px;margin:4px 0 0}.lp p{display:none}.lp .brand small{display:none}}
+.ubar{flex-wrap:wrap}.ubar .roles{margin:0 auto 0 0}@media (max-width:760px){.ubar .roles{width:100%;order:-1}.ubar{justify-content:space-between}}
+.roles button[aria-disabled=true]{opacity:.5;cursor:not-allowed}.roles button[aria-disabled=true]:after{content:" \1F512";font-size:11px}
+</style></head><body>
+<div class="login" id="login"><div class="lp"><div class="brand"><i>✦</i><div>Wayfinder<small>Work help assistant</small></div></div><h1>Answers when it's safe.<br>People when it matters.</h1><p>Sign in to ask work questions, send requests to the right team, and keep a clear record.</p></div>
+<div class="lf"><form id="lf" class="lcard" autocomplete="off" novalidate><h2>Sign in</h2><p class="small">Your email decides your mode. There is no way to switch to another mode.</p>
+<label class="fld">Your name<input id="ln" maxlength="40" placeholder="Type your name, for example Anitha" autocomplete="name"></label>
+<label class="fld">Email<input id="le" type="email" inputmode="email" placeholder="you@wayfinder.demo"></label>
+<label class="fld">Password<span class="pw"><input id="lp" type="password" placeholder="Your password"><button type="button" id="seepw" aria-label="Show or hide password">Show</button></span></label>
+<div class="err" id="lerr" role="alert"></div><button class="btn wide">Sign in</button>
+<div class="terms"><b>Demo accounts</b> (tap to fill, password is <b>demo123</b>)<div id="demo2"></div></div></form></div></div>
+<div class="app">
+<aside class="side"><div class="brand"><i>✦</i><div>Wayfinder<small>Work help assistant</small></div></div>
+<nav id="nav"></nav>
+<div class="sbox"><div class="demo">Practice version. Made-up information only, no real patient or staff data.</div></div></aside>
+<main>
+<div class="ubar"><span id="who"></span><button class="btn g" id="out">Sign out</button></div>
+<section class="pg on" id="p-ask"><div id="log"></div><form class="ask" id="f"><input id="q" autocomplete="off" aria-label="Your question" placeholder="Ask anything about your work…"><button class="btn">Ask</button></form></section>
+<section class="pg" id="p-dash"><div class="scr" id="dash"></div></section>
+<section class="pg" id="p-req"><div class="scr" id="req"></div></section>
+<section class="pg" id="p-hist"><div class="scr" id="hist"></div></section>
+<section class="pg" id="p-gl"><div class="scr" id="gl"></div></section>
+</main></div>
+<script>
+/* Approved information (made-up). type "doc" = procedure, "term" = word meaning */
+const KB=[
+{id:"OPS-104",t:"Correct a Provider Record",wf:"WF-23",team:"Provider Data Team",topic:"prov",k:"provider record correction correct update change fix directory doctor details wrong",fields:["Provider ID","What needs to change","Reason","Date it should start"],b:"Submit a Provider Record Correction request (form WF-23). You will need the provider ID, what should change, the reason, and the date the change should start. The Provider Data Team checks it before anything is changed."},
+{id:"OPS-112",t:"Badge Replacement (Facilities memo)",team:"Operations Policy Team",topic:"badge",k:"badge replacement reissue lost badge turnaround days how long",b:"Replacement badges are ready in 2 business days."},
+{id:"OPS-113",t:"Badge Replacement (Security guide)",team:"Operations Policy Team",topic:"badge",k:"badge replacement reissue lost badge turnaround days how long",b:"Replacement badges are ready in 5 business days after an ID check."},
+{id:"OPS-120",t:"Unlock a Scheduling Login",team:"IT Team",topic:"unlock",k:"unlock locked login password reset scheduling sign in forgot account locked out",b:"Open the self-service unlock page and answer the two verification questions. Wait 5 minutes, then try again. If the account keeps locking, contact the IT Team."},
+{id:"OPS-121",t:"Request Access to a System",wf:"WF-12",team:"IT Team",topic:"access",k:"request access system permission new software onboarding need access billing scheduling",fields:["System name","Your job role","Manager's name"],b:"Send a System Access Request (form WF-12). You will need the system name, your job role, and your manager's name. Your manager must approve it before IT gives access."},
+{id:"OPS-122",t:"Report a System Problem",team:"IT Team",topic:"itproblem",k:"report system problem error down slow not working broken outage computer issue",b:"Write down what you were doing and the exact error message, then contact the IT Team. For problems that stop patient check-in, mark it as urgent."},
+{id:"OPS-131",t:"Daily Bed Report",team:"Operations Policy Team",topic:"census",k:"daily bed report census occupancy find where beds unit export",b:"The daily bed report is ready at 6:00 AM. Go to Reports > Operations > Census, choose your unit, and export it as a CSV file."},
+{id:"OPS-132",t:"Request a Custom Report",wf:"WF-15",team:"Analytics Team",topic:"report",k:"request custom report new report data pull dashboard analytics",fields:["What the report should show","Date range","File type (CSV or PDF)"],b:"Send a Custom Report Request (form WF-15) saying what it should show, the date range, and the file type. The Analytics Team replies within 3 business days."},
+{id:"OPS-140",t:"Follow Up on an Insurance Approval",wf:"WF-31",team:"Billing Team",topic:"auth",k:"prior authorization insurance approval follow up pending payer status tracker",fields:["Approval reference number","Insurance company","Follow-up date"],b:"Record every request in the Auth Tracker and follow up every 3 business days. If it is still open after 10 business days, tell the Billing Supervisor."},
+{id:"OPS-150",t:"Swap a Shift",team:"Unit Manager",topic:"shift",k:"swap shift trade cover roster schedule change colleague",b:"Both employees confirm the swap in the roster tool, and the unit manager approves it. Swaps within 48 hours also need supervisor approval."},
+{id:"OPS-151",t:"Request Time Off",team:"Unit Manager",topic:"timeoff",k:"time off leave vacation holiday day off request annual",b:"Send the request in the roster tool at least 14 days ahead. Your unit manager approves it, and you will get a notice when it is decided."},
+{id:"OPS-160",t:"Which Team Should I Contact?",team:"Operations Policy Team",topic:"who",k:"which team contact who handles help support owner whom ask",b:"IT Team: logins and system problems. Account Team: patient or member accounts. Clinical Support Team: anything medical. Billing Team: insurance and payments. Operations Policy Team: everything else."},
+{id:"OPS-170",t:"Documents Needed Before Check-in",team:"Front Desk Lead",topic:"intake",k:"documents needed before check in intake registration checklist forms required patient arrives",b:"Before check-in, collect the person's legal name, date of birth, contact number, a photo of the insurance card, and the signed consent form."},
+{id:"OPS-171",t:"What Does 'Pending Documents' Mean?",team:"Front Desk Lead",topic:"pending",k:"pending documents status record missing item why stuck",b:"A record shows 'Pending Documents' when one required item from the check-in list is missing. Add the missing item and the status clears by itself."},
+{id:"OPS-180",t:"Change a Document Template",wf:"WF-40",team:"Compliance Review",topic:"template",k:"change update template form letter edit document revision",fields:["Which template","What should change","Needed by date"],b:"Send a Template Change Request (form WF-40). Compliance Review checks the change, and new versions go live 2 days after approval."},
+{id:"OPS-190",t:"Visitor Sign-in",team:"Front Desk Lead",topic:"visitor",k:"visitor guest sign in register badge visiting hours policy",b:"All visitors sign in at the front desk with a photo ID, receive a visitor sticker, and must be escorted in restricted areas. Visiting hours are 9:00 AM to 7:00 PM."},
+{id:"OPS-191",t:"Book a Meeting Room",team:"Operations Policy Team",topic:"room",k:"book meeting room conference reserve space calendar booking",b:"Reserve rooms in the calendar tool by choosing the room and time. Bookings can be made up to 30 days ahead, and unused rooms are released after 15 minutes."},
+{id:"OPS-192",t:"Fire Drill and Emergency Exits",team:"Operations Policy Team",topic:"fire",k:"fire drill emergency exit evacuation alarm assembly point",b:"When the alarm sounds, stop work and leave by the nearest marked exit. Go to the assembly point shown on the floor map, and do not use elevators. Drills happen twice a year."},
+{id:"OPS-193",t:"Dress Code and ID Badge Rules",team:"Operations Policy Team",topic:"dress",k:"dress code uniform id badge wear attire clothing rules",b:"Wear your ID badge above the waist at all times. Clinical areas need the unit uniform, and office areas use business casual."},
+{id:"OPS-194",t:"Printer and Scanner Help",team:"IT Team",topic:"printer",k:"printer scanner not printing paper jam add printer scan copy",b:"Restart the printer, check paper and toner, then try again. To add a printer, choose it from the Printers list in the Self-service portal. Still not working? Contact the IT Team."},
+{id:"OPS-195",t:"Update Your Directory Contact Details",team:"Operations Policy Team",topic:"mycontact",k:"update my phone number email extension staff directory contact details desk",b:"Open the Staff Directory, choose Edit My Details, and update your phone, extension or desk location. Changes show within 1 hour."},
+{id:"OPS-196",t:"Find Training Courses",team:"Operations Policy Team",topic:"training",k:"training course learning e-learning find enroll class courses where",b:"All courses are in the Learning Portal under My Learning. Choose a course and press Enroll."},
+{id:"OPS-197",t:"Mandatory Training Deadlines",team:"Operations Policy Team",topic:"mandatory",k:"mandatory training deadline due annual compliance overdue yearly",b:"Mandatory training must be finished within 30 days of your start date and then every year. You will get reminders 14 and 3 days before the due date."},
+{id:"OPS-198",t:"Break and Lunch Times",team:"Unit Manager",topic:"break",k:"break lunch time rest meal minutes coffee",b:"Staff on a full shift get a 30-minute meal break and two 15-minute rest breaks. Your unit manager sets the times so that coverage stays safe."},
+{id:"OPS-199",t:"Department Office Hours",team:"Operations Policy Team",topic:"hours",k:"department office hours open close opening times working hours schedule weekday",b:"Most support departments are open Monday to Friday, 8:00 AM to 5:00 PM. IT Team support is available 24 hours a day for urgent problems."},
+{id:"OPS-200",t:"Holiday Calendar",team:"Operations Policy Team",topic:"holiday",k:"holiday calendar public holidays closed days off year dates",b:"The yearly holiday calendar is on the Staff Intranet under Calendars. Support departments are closed on listed holidays, and clinical units follow the on-call schedule."},
+{id:"OPS-201",t:"Guest Wi-Fi",team:"IT Team",topic:"wifi",k:"wifi wi-fi guest internet network connect password visitors wireless",b:"Visitors can connect to the Guest network and accept the terms on the sign-in page. The password changes weekly and is available at the front desk."},
+{id:"GEN-1",gen:1,t:"Drinking Water Daily",team:"Operations Policy Team",topic:"g1",k:"drink water daily hydration ml litres liters glass glasses intake day thirsty how much",b:"Yes, drinking water is safe and healthy for most people. But 100 ml a day is very little, less than half a small glass. Many health organizations suggest about 1.5 to 2 litres of fluids a day for adults (roughly 6 to 8 glasses), and more in hot weather or when you are active. Food also provides some fluid. If you have a medical condition, such as kidney or heart problems, or a doctor gave you a fluid limit, follow your doctor's advice."},
+{id:"GEN-2",gen:1,t:"Healthy Sleep",team:"Operations Policy Team",topic:"g2",k:"sleep hours night rest tired sleeping enough how many",b:"Most adults do best with 7 to 9 hours of sleep a night. A regular bedtime and a dark, quiet room help."},
+{id:"GEN-3",gen:1,t:"Eye Strain from Screens",team:"Operations Policy Team",topic:"g3",k:"eye strain screen eyes tired computer headache dry rule",b:"Try the 20-20-20 rule: every 20 minutes, look at something about 20 feet (6 metres) away for 20 seconds. Blink often and keep your screen at arm's length."},
+{id:"GEN-4",gen:1,t:"Sitting and Posture",team:"Operations Policy Team",topic:"g4",k:"sitting posture desk back pain stretch stand break long chair ergonomic",b:"Stand up and stretch every 30 to 60 minutes. Keep your feet flat, your back supported, and your screen at eye level."},
+{id:"GEN-5",gen:1,t:"Washing Hands",team:"Operations Policy Team",topic:"g5",k:"wash hands handwashing hygiene soap sanitizer how long clean",b:"Wash with soap and water for at least 20 seconds, covering all surfaces. If your hands are not visibly dirty, an alcohol-based hand rub also works."},
+{id:"GEN-6",gen:1,t:"Coffee and Caffeine",team:"Operations Policy Team",topic:"g6",k:"coffee caffeine tea cups day energy drink much safe",b:"Up to about 400 mg of caffeine a day (around 4 cups of brewed coffee) is generally considered safe for most healthy adults. If you are pregnant or have a heart condition, ask your doctor."},
+{id:"GEN-7",gen:1,t:"Staying Active",team:"Operations Policy Team",topic:"g7",k:"exercise walking active steps minutes week fitness physical activity workout",b:"Adults are generally advised to get about 150 minutes of moderate activity a week, such as brisk walking. Even short walks during breaks help."},
+{id:"GEN-8",gen:1,t:"Feeling Stressed at Work",team:"Operations Policy Team",topic:"g8",k:"stress stressed anxious overwhelmed burnout calm relax breathing pressure workload",b:"Take a short break, breathe slowly (in for 4 counts, out for 6), and step away from your screen. If stress keeps building, talk to your manager, someone you trust, or a health professional."},
+{id:"T-1",term:"Provider",t:"Provider",topic:"t1",k:"provider meaning definition mean what doctor nurse clinician",b:"A provider is a doctor, nurse or other clinician listed in the organization's directory."},
+{id:"T-2",term:"Provider ID",t:"Provider ID",topic:"t2",k:"provider id number meaning definition identifier mean",b:"The provider ID is the unique number that identifies one provider in the directory, like PRV-1042."},
+{id:"T-3",term:"Workflow",t:"Workflow",topic:"t3",k:"workflow meaning definition mean process steps form",b:"A workflow is a routine set of steps for getting a task done, usually with a form."},
+{id:"T-4",term:"Prior authorization",t:"Prior authorization",topic:"t4",k:"prior authorization meaning definition mean insurance approval before",b:"Prior authorization is approval from an insurance company that must be received before a service is provided."},
+{id:"T-5",term:"Census",t:"Census",topic:"t5",k:"census meaning definition mean count beds",b:"Census is the count of beds in use in a unit at a set time."},
+{id:"T-6",term:"Escalation",t:"Escalation",topic:"t6",k:"escalation escalate meaning definition mean sent person team handoff",b:"Escalation means passing a request to a person or team because the assistant should not handle it alone."},
+{id:"T-7",term:"Payer",t:"Payer",topic:"t7",k:"payer meaning definition mean insurance company pays",b:"A payer is the insurance company or program that pays for care."}];
+const WHO={clinical:["Clinical Support Team","This is a medical question. I can only help with office and operations tasks."],account:["Account Team","Changes to a person's account or insurance must be reviewed by an authorized staff member."],security:["Security Team","This involves access or private information, which needs a person to approve."],irrev:["Operations Policy Team","This action cannot be undone, so a person has to approve it first."]};
+const GUARDS=[["clinical",/(diagnos|medication|\bdose\b|dosage|treatment|prescri|what should .*(take|prescribe)|medical (advice|recommend))/i],["security",/(bypass|disable (auth|access)|override (access|auth)|restricted (data|info)|without (authorization|approval)|give me access)/i],["account",/(insurance info|insurance details|member (id|detail)|patient'?s? (record|account|info)|change .*(patient|member)|\bmy (claim|account)\b|personal record)/i],["irrev",/(delete|permanently|deactivate|terminate|purge|write.?off|approve .*(payment|transaction))/i]];
+const TEAMQ=[
+{team:"HR Team",why:"Pay, benefits and employment questions are handled by the HR Team.",re:/(payroll|salary|paycheck|pay slip|payslip|my pay\b|bonus|benefits|pension|resign|promotion|disciplinary|hiring)/i},
+{team:"Legal Team",why:"Legal questions are handled by the Legal Team.",re:/(legal|lawsuit|attorney|lawyer|subpoena|contract dispute|sue\b|liability)/i},
+{team:"Facilities Team",why:"Building and repair issues are handled by the Facilities Team.",re:/(air conditioning|\bAC\b|elevator|parking|leak|plumbing|cleaning|light bulb|broken (door|chair|window)|repair)/i},
+{team:"Procurement Team",why:"Purchasing and vendor questions are handled by the Procurement Team.",re:/(purchase order|vendor|order (equipment|supplies)|buy (equipment|supplies)|supplier|invoice approval)/i},
+{team:"Patient Relations Team",why:"Complaints and patient feedback are handled by the Patient Relations Team.",re:/(complaint|grievance|unhappy patient|compensation|feedback about (a )?(doctor|nurse))/i},
+{team:"Communications Team",why:"Media and public statements are handled by the Communications Team.",re:/(press|journalist|reporter|media request|social media post|public statement)/i}];
+const STOP=new Set("the a an to of for and or in on is it my what where when with from at be this that me we you are as by if need does do i can should".split(" "));
+const ROLES={emp:{n:"Employee",tabs:["ask","req","gl"],hi:"You can ask questions and send requests."},team:{n:"Team member",tabs:["ask","req","gl"],hi:"You can also pick up and finish requests sent to your team."},mgr:{n:"Manager",tabs:["ask","dash","req","hist","gl"],hi:"You can also view the dashboard and the full history."},ceo:{n:"CEO",tabs:["ask","dash","req","gl"],hi:"You get a leadership summary on the Dashboard, plus a read-only view of all requests."}};
+const TABN={ask:"Ask",dash:"Dashboard",req:"Requests",hist:"History",gl:"Word meanings"};
+const SEED={answer:64,details:14,person:22,unsure:9,teams:{"Account Team":9,"Clinical Support Team":8,"Security Team":3,"Operations Policy Team":4,"IT Team":2,"HR Team":5,"Facilities Team":4,"Legal Team":1}};
+const S={role:"emp",tab:"ask",sent:[],hist:[]};
+const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const toks=s=>(s.toLowerCase().match(/[a-z0-9]+/g)||[]).filter(w=>!STOP.has(w)&&w.length>1),stem=w=>w.length>5?w.slice(0,5):w;
+const now=()=>new Date().toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"});
+const can=t=>ROLES[S.role].tabs.includes(t);
+function search(q){const qt=[...new Set(toks(q))].map(stem);
+ return KB.map(a=>{const kt=new Set(toks(a.k+" "+a.t).map(stem));return{a,s:qt.filter(w=>kt.has(w)).length/Math.max(2,Math.min(qt.length,3))}}).filter(x=>x.s>0).sort((x,y)=>y.s-x.s||(!!x.a.term-!!y.a.term))}
+function sure(s){return s>=.8?"High: strong match with an approved document":s>=.55?"Medium: partly matches, please double-check":"Low"}
+function decide(q){const g=GUARDS.find(g=>g[1].test(q));
+ if(g){const[team,why]=WHO[g[0]];return{kind:"person",team,why}}
+ const tq=TEAMQ.find(x=>x.re.test(q));if(tq)return{kind:"person",team:tq.team,why:tq.why};
+ const res=search(q),top=res[0];
+ if(!top||top.s<.5)return{kind:"unsure",why:"I could not find this in the approved information, so I will not guess.",team:"Operations Policy Team"};
+ const same=res.filter(x=>x.a.topic===top.a.topic&&x.s>=.5);
+ if(same.length>1)return{kind:"unsure",conflict:same.map(x=>x.a),why:"Two approved documents say different things, so I cannot tell which one is right.",team:"Operations Policy Team"};
+ const a=top.a,isQ=/^(how|what|where|which|when|who|can|is|does)\b/i.test(q.trim())||/\?$/.test(q.trim());
+ if(a.fields&&!isQ){const v={},m=re=>(q.match(re)||[])[1];
+  if(a.id==="OPS-104"){if(m(/\b(PRV-?\d+)\b/i))v[a.fields[0]]=m(/\b(PRV-?\d+)\b/i).toUpperCase();if(m(/reason[:\s]+([^.;]+)/i))v["Reason"]=m(/reason[:\s]+([^.;]+)/i).trim()}
+  return{kind:"form",a,vals:v}}
+ return{kind:"answer",a,s:Math.min(1,top.s*1.05)}}
+function explain(text){const hit=KB.filter(a=>a.term&&new RegExp("\\b"+a.term+"\\b","i").test(text)&&a.b!==text);
+ return hit.length?"<div class='terms'><b>Words explained</b><br>"+hit.map(a=>"<b>"+a.term+":</b> "+esc(a.b)).join("<br>")+"</div>":""}
+function send(team,q,why,extra){const id="T-"+(1041+S.sent.length);S.sent.unshift({id,team,q,why,time:now(),status:"Waiting",extra:extra||"",by:S.user?S.user.n:""});return id}
+function rec(q,type,text,team){S.hist.unshift({time:now(),q,type,text,team:team||""})}
+/* Chat */
+const log=$("#log");
+function put(h,c){const d=document.createElement("div");d.className=c||"";d.innerHTML=h;log.append(d);log.scrollTop=1e9;return d}
+const EX=["How do I correct a provider record?","How do I unlock my scheduling login?","How do I swap a shift?","How do I request time off?","What documents are needed before check-in?","Where is the daily bed report?","How do I sign in a visitor?","What do I do during a fire drill?","Can I drink 100 ml of water daily?","How many hours of sleep do adults need?","What is prior authorization?","What medication should this patient take?","Change the patient's insurance information.","When will I get my salary?","The air conditioning is broken in room 4.","I want to speak to a lawyer about a contract.","How long does a badge replacement take?","How do I perform an operation that does not exist in the knowledge base?"];
+function welcome(){log.innerHTML="";put("<div class='card hero'><h2>Hi "+(S.user?esc(S.user.n.split(" ")[0]):ROLES[S.role].n)+", what can I help with?</h2><p>"+ROLES[S.role].hi+" I answer from approved company documents and show where each answer came from. General work questions I answer myself. Medical, private, or other-team questions (like pay, legal or repairs) I send to the right team.</p><p class='small'>Try one of these, or type your own question below:</p><ul class='list'>"+EX.map(x=>"<li><button data-t=\""+esc(x)+"\">"+esc(x)+"</button></li>").join("")+"</ul><div class='terms'><b>How to read my answers</b><br><b>Source:</b> the approved document the answer came from.<br><b>How sure I am:</b> how closely the document matches your question.<br><b>Sent to a team:</b> a person will handle it. I do not take any action myself.</div></div>")}
+log.onclick=e=>{const b=e.target.closest("[data-t]");if(b)ask(b.dataset.t)};
+$("#f").onsubmit=e=>{e.preventDefault();const v=$("#q").value.trim();if(!v)return;$("#q").value="";ask(v)};
+async function ask(q){put(esc(q),"me");const d=put("<div class='card load'>Reading your question…</div>");
+ for(const s of["Checking it is safe to answer…","Looking in approved documents…","Preparing my answer…"]){await new Promise(r=>setTimeout(r,250));d.firstChild.textContent=s}
+ let r;try{r=decide(q)}catch(e){d.innerHTML="<div class='card'><span class='tag t-r'>Something went wrong</span><p>I will not guess. Please ask a team member for help.</p></div>";return}
+ d.innerHTML=draw(r,q);bind(d,r,q);render()}
+const why=t=>"<p class='small'><b>Why this reply:</b> "+t+"</p>";
+function draw(r,q){
+ if(r.kind==="answer"){const isT=!!r.a.term;rec(q,"answer","Answered from approved information");return "<div class='card'><span class='tag t-n'>Answer</span><p>"+esc(r.a.b)+"</p><div class='src'>Source: <b>"+esc(r.a.t)+"</b> ("+(isT?"Word meanings":r.a.gen?"General information, not company policy":r.a.id)+")"+(r.a.wf?" · Form "+r.a.wf:"")+"</div><span class='small'>How sure I am: "+sure(r.s)+"</span>"+(r.a.wf?"<div class='row'><button class='btn' data-go=\""+r.a.id+"\">Start this request</button></div>":"")+(r.a.gen?"<p class='small'>This is general information only, not medical advice. For your own health concerns, please ask a doctor.</p>":"")+explain(r.a.b+" "+q)+why("An approved "+(isT?"definition":"document")+" matches your question.")+"</div>"}
+ if(r.kind==="form"){rec(q,"details","Asked for more details");return "<div class='card'><span class='tag t-a'>I need a few details</span><p>I can help with <b>"+esc(r.a.t)+"</b>. Please fill in the boxes below. I will not guess any of them.</p>"+r.a.fields.map(f=>"<label class='fld'>"+esc(f)+(r.vals[f]?" (filled in from your message)":"")+"<input data-f=\""+esc(f)+"\" value=\""+esc(r.vals[f]||"")+"\" "+(/date/i.test(f)?"placeholder='Example: 2026-11-01'":"")+"></label>").join("")+"<div class='row'><button class='btn' data-check>Continue</button></div><div class='err' data-err></div>"+explain(r.a.b)+why("This kind of request cannot be sent without these details.")+"</div>"}
+ if(r.kind==="person"){const id=send(r.team,q,r.why);rec(q,"person","Sent to a team",r.team);return "<div class='card'><span class='tag t-r'>This needs a person</span><p>I cannot help with this one myself. "+esc(r.why)+"</p><p>I sent it to the <b>"+r.team+"</b> (ticket "+id+"). I did <b>not</b> take any action.</p>"+explain("escalation")+why("Questions like this are always handled by people, never by me.")+"</div>"}
+ const docs=r.conflict?"<div class='src'>"+r.conflict.map(a=>"<b>"+a.id+"</b> says: "+esc(a.b)).join("<br>")+"</div>":"";
+ rec(q,"unsure","Not sure");return "<div class='card'><span class='tag t-a'>I am not sure</span><p>"+esc(r.why)+"</p>"+docs+"<p class='small'>I could not check this against the approved information, and I do not want to guess. You can send it to a team, or try rephrasing with the name of the system, form or report.</p><div class='row'><button class='btn' data-fwd>Send to "+r.team+"</button></div></div>"}
+function bind(d,r,q){d.onclick=e=>{const t=e.target;
+ if(t.hasAttribute("data-fwd")){const id=send(r.team,q,r.why);t.parentNode.innerHTML="<span class='tag t-n'>Sent</span> Ticket "+id+" is with the "+r.team+".";render()}
+ if(t.dataset.go){const a=KB.find(k=>k.id===t.dataset.go);ask("I need to "+a.t.toLowerCase()+".")}
+ if(t.hasAttribute("data-check")){const a=r.a,v={};d.querySelectorAll("[data-f]").forEach(i=>v[i.dataset.f]=i.value.trim());
+  const miss=a.fields.filter(f=>!v[f]);if(miss.length){d.querySelector("[data-err]").textContent="Please fill in: "+miss.join(", ");return}
+  const df=a.fields.find(f=>/start|by date|^date|follow-up date/i.test(f));if(df&&/date/i.test(df)&&!/^\d{4}-\d{2}-\d{2}$/.test(v[df])){d.querySelector("[data-err]").textContent="Please write the date like this: 2026-11-01.";return}
+  const n=put("<div class='card'><span class='tag t-n'>Please check before sending</span>"+Object.entries(v).map(([k,x])=>"<div class='src'><b>"+esc(k)+":</b> "+esc(x)+"</div>").join("")+"<p class='small'>Nothing is sent until you press the button.</p><div class='row'><button class='btn' data-ok>Send request</button><button class='btn g' data-no>Cancel</button></div></div>");
+  n.onclick=ev=>{const b=ev.target;if(b.hasAttribute("data-ok")){const id=send(a.team,a.t+" request","Request approved by you",Object.entries(v).map(x=>x.join(": ")).join(" · "));rec(a.t+" request","answer","Sent after you approved",a.team);b.parentNode.innerHTML="<span class='tag t-n'>Sent</span> Ticket "+id+" is with the "+a.team+".";render()}if(b.hasAttribute("data-no"))b.parentNode.innerHTML="<span class='tag t-g'>Cancelled</span> Nothing was sent."}}}}
+/* Role + pages */
+function toast(m){const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),1800)}
+const USERS=[{e:"employee@wayfinder.demo",n:"Meera Iyer",r:"emp",allow:["emp"]},{e:"team@wayfinder.demo",n:"Karthik Raj",r:"team",allow:["team"]},{e:"manager@wayfinder.demo",n:"Divya Menon",r:"mgr",allow:["mgr"]},{e:"ceo@wayfinder.demo",n:"Rohan Shah",r:"ceo",allow:["ceo"]}],PW="demo123";let fails=0,lock=0;
+function syncRole(){document.querySelectorAll("#role button").forEach(x=>{x.setAttribute("aria-pressed",x.dataset.r===S.role);x.setAttribute("aria-disabled",String(!(S.user&&S.user.allow.includes(x.dataset.r))));x.title=S.user&&S.user.allow.includes(x.dataset.r)?"Your mode":"Blocked for your email"});$("#who").textContent=S.user?S.user.n+" · "+ROLES[S.role].n+" mode":""}
+document.querySelectorAll("#role button").forEach(b=>b.onclick=()=>{if(!S.user)return;if(!S.user.allow.includes(b.dataset.r)){toast("Blocked: "+S.user.e+" can't use "+ROLES[b.dataset.r].n+" mode");rec(S.user.n+" tried "+ROLES[b.dataset.r].n+" mode","login","Blocked: mode not allowed for this email");return}S.role=b.dataset.r;if(!can(S.tab))S.tab="ask";rec(S.user.n+" switched role to "+ROLES[S.role].n,"login","Role switched");syncRole();toast("You are now: "+ROLES[S.role].n);welcome();render()});
+$("#demo2").innerHTML=USERS.map(u=>"<button type='button' data-e='"+u.e+"'>"+u.e+"<span>"+ROLES[u.r].n+"</span></button>").join("");
+$("#demo2").onclick=e=>{const b=e.target.closest("[data-e]");if(b){$("#le").value=b.dataset.e;$("#lp").value=PW;$("#lerr").textContent=""}};
+$("#seepw").onclick=()=>{const p=$("#lp"),h=p.type==="password";p.type=h?"text":"password";$("#seepw").textContent=h?"Hide":"Show"};
+$("#lf").onsubmit=e=>{e.preventDefault();const em=$("#le").value.trim().toLowerCase(),pw=$("#lp").value,err=$("#lerr");
+ if(Date.now()<lock){err.textContent="Too many tries. Please wait a few seconds.";return}
+ if(!em||!pw){err.textContent="Please enter your email and password.";return}
+ const u=USERS.find(x=>x.e===em);
+ if(!u||pw!==PW){fails++;err.textContent="Email or password is not correct."+(fails>=5?" Locked for 20 seconds.":"");if(fails>=5){lock=Date.now()+20000;fails=0}return}
+ fails=0;err.textContent="";S.user={...u,n:($("#ln").value.trim().slice(0,40)||u.n)};S.role=u.r;S.tab="ask";$("#lp").value="";$("#login").hidden=true;syncRole();rec("Signed in as "+S.user.n,"login","Login successful");toast("Welcome, "+S.user.n.split(" ")[0]);welcome();render()};
+$("#out").onclick=()=>{if(S.user)rec("Signed out: "+S.user.n,"login","Logged out");S.user=null;$("#login").hidden=false;$("#log").innerHTML="";$("#le").value="";$("#lp").value="";$("#ln").value=""};
+$("#nav").onclick=e=>{const b=e.target.closest("[data-p]");if(b&&can(b.dataset.p)){S.tab=b.dataset.p;render()}};
+const bars=o=>{const m=Math.max(...Object.values(o))||1;return"<div class='bars'>"+Object.entries(o).map(([k,v])=>"<div><span>"+esc(k)+"</span><i style='width:"+Math.max(4,v/m*100)+"%'></i><b>"+v+"</b></div>").join("")+"</div>"};
+function render(){
+ $("#nav").innerHTML=ROLES[S.role].tabs.map(t=>"<button data-p='"+t+"' aria-current='"+(t===S.tab)+"'>"+TABN[t]+"</button>").join("");
+ document.querySelectorAll(".pg").forEach(p=>p.classList.toggle("on",p.id==="p-"+S.tab));
+ const c=t=>S.hist.filter(h=>h.type===t).length,a=SEED.answer+c("answer"),d=SEED.details+c("details"),p=SEED.person+c("person"),u=SEED.unsure+c("unsure");
+ const teams={...SEED.teams};S.sent.forEach(t=>teams[t.team]=(teams[t.team]||0)+1);
+ const tot=a+d+p+u,tp=Object.entries(teams).sort((x,y)=>y[1]-x[1])[0],ceo=S.role==="ceo"?"<div class='card hero'><h2>Leadership summary</h2><p>"+Math.round(a/tot*100)+"% of questions were answered by the assistant, and "+Math.round(p/tot*100)+"% were sent to people because they were sensitive or belong to another team.</p><div class='grid'><div class='stat'><div class='num'>"+Math.round(a*5/60)+" h</div><span>Estimated staff time saved</span></div><div class='stat'><div class='num'>0</div><span>Actions taken without approval</span></div><div class='stat'><div class='num' style='font-size:22px'>"+esc(tp[0])+"</div><span>Team with most requests ("+tp[1]+")</span></div></div><p class='small'>Time saved is an estimate: 5 minutes per answered question (demo assumption).</p></div>":"";
+ $("#dash").innerHTML=ceo+"<div class='card'><h2>Dashboard</h2><p class='small'>A summary of how questions were handled. Starting numbers are made up for the demo; your own questions are added live.</p></div><div class='grid'>"+[["Questions asked",a+d+p+u],["Answered from documents",a],["Sent to a team",p],["Needed more details",d],["Not sure",u]].map(x=>"<div class='stat'><div class='num'>"+x[1]+"</div><span>"+x[0]+"</span></div>").join("")+"</div><div class='two'><div class='card'><h3>What happened to questions</h3>"+bars({"Answered":a,"Sent to a team":p,"Needed details":d,"Not sure":u})+"</div><div class='card'><h3>Teams receiving requests</h3>"+bars(teams)+"</div></div><div class='card'><h3>Safety record</h3><p>Actions taken by the assistant without a person's approval: <b>0</b>. Medical, account and private-data questions always go to a person.</p></div><div class='card'><h3>Latest activity</h3>"+(S.hist.length?S.hist.slice(0,5).map(h=>"<div class='line'><span class='small'>"+h.time+"</span><span>"+esc(h.q)+" → <b>"+h.text+"</b></span></div>").join(""):"<p class='small'>Ask a question and it will appear here.</p>")+"</div>";
+ const act=S.role==="team",st={Waiting:["t-a","Waiting"],Working:["t-n","In progress"],Done:["t-g","Done"]};
+ $("#req").innerHTML="<div class='card'><h2>Requests sent to teams</h2><p class='small'>"+(act?"As a team member you can pick up a request and mark it done.":S.role==="ceo"?"Read-only view of all requests. Team members update the status.":"This shows what happened to the requests you sent. Team members update the status.")+"</p></div>"+(S.sent.length?S.sent.map((t,i)=>"<div class='card'><span class='tag "+st[t.status][0]+"'>"+st[t.status][1]+"</span> <b>"+t.id+"</b> to "+t.team+"<p>"+esc(t.q)+"</p><p class='small'>Reason: "+esc(t.why)+(t.extra?"<br>Details: "+esc(t.extra):"")+"<br>Sent by "+esc(t.by||"you")+" at "+t.time+"</p>"+(act&&t.status==="Waiting"?"<button class='btn' data-s='"+i+"'>Pick up</button>":"")+(act&&t.status==="Working"?"<button class='btn' data-d='"+i+"'>Mark as done</button>":"")+"</div>").join(""):"<div class='empty'>No requests yet. When a question is passed to a team, it will appear here.</div>");
+ $("#hist").innerHTML="<div class='card'><h2>History</h2><p class='small'>A record of every question and what was done, kept for accountability.</p>"+(S.hist.length?S.hist.map(h=>"<div class='line'><span class='small'>"+h.time+"</span><span><b>"+esc(h.q)+"</b><br><span class='small'>"+h.text+(h.team?" → "+h.team:"")+"</span></span></div>").join(""):"<p class='empty'>Nothing yet.</p>")+"</div>";
+ $("#gl").innerHTML="<div class='card'><h2>Word meanings</h2><p class='small'>Plain explanations of words used in this app.</p><dl class='gl'>"+[["Approved information","Company documents that have been checked and allowed as sources. I answer only from these."],["Source","The document an answer came from, shown so you can check it."],["How sure I am","How closely an approved document matches your question."],["Sent to a team / Escalation","Passing a request to a person because it needs human judgment or approval."],["Request / Ticket","A saved note sent to a team, with a number like T-1042."],["Form (workflow)","A short set of steps and questions for a routine task, such as WF-23."],["History","A record of every question, kept so that actions can be checked later."],["Demo data","Made-up information used only for practice."]].concat(KB.filter(k=>k.term).map(k=>[k.term,k.b])).map(x=>"<dt>"+esc(x[0])+"</dt><dd>"+esc(x[1])+"</dd>").join("")+"</dl></div>"}
+document.addEventListener("click",e=>{const d=e.target.dataset;if(S.role==="team"){if(d.s!==undefined){S.sent[d.s].status="Working";render()}if(d.d!==undefined){S.sent[d.d].status="Done";render()}}});
+welcome();render();
+</script></body></html>
